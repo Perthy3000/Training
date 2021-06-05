@@ -16,8 +16,7 @@ app.use("/app/echo", EchoRoute);
 
 app.use("/app/no_auth", TodoRoute);
 
-connect_db(() => {
-  app.listen(PORT, () => {
-    console.log("Server has started!");
-  });
+connect_db();
+app.listen(PORT, () => {
+  console.log("Server has started!");
 });
