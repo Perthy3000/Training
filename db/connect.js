@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const { DATABASE_URL } = require("./config");
 
-const connect_db = () => {
-  mongoose
-    .connect(DATABASE_URL, {
+const connect_db = async (MONGO_URL) => {
+  await mongoose
+    .connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
