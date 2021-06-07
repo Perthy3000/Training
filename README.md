@@ -14,7 +14,7 @@ Run with nodemon `yarn start`
 
 Run with PM2
 
-```
+```sh
 > yarn pm2 startup
 > yarn pm2 set pm2:autodump true
 > yarn pm2 start app.js
