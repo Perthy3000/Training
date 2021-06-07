@@ -1,22 +1,42 @@
 const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
+const cookieParser = require("cookie-parser");
 const connect_db = require("./db/connect");
 const EchoRoute = require("./controller/echo");
 const TodoRoute = require("./controller/todo");
+const AuthRoute = require("./controller/auth");
+const TodoAuthRoute = require("./controller/todo_auth");
+const authMiddleware = require("./controller/auth_middleware");
 
-const app = express();
-const PORT = 3000;
+async function main() {
+  // dotenv.config({ path: path.join(__dirname, ".env") });
+  dotenv.config();
 
-app.use(express.json());
+  const PORT = process.env.PORT || 3000;
+  const MONGO_URL = process.env.MONGO_URL;
 
-app.get("/", (req, res) => {
-  res.json({ first: "page" });
-});
+  await connect_db(MONGO_URL);
+  const app = express();
 
-app.use("/app/echo", EchoRoute);
+  app.use(cookieParser());
+  app.use(express.json());
 
-app.use("/app/no_auth", TodoRoute);
+  app.get("/", (req, res) => {
+    res.json({ first: "page" });
+  });
 
-connect_db();
-app.listen(PORT, () => {
-  console.log("Server has started!");
-});
+  app.use("/app/echo", EchoRoute);
+
+  app.use("/app/no_auth", TodoRoute);
+
+  app.use("/app/auth", AuthRoute);
+
+  app.use("/app/with_auth", authMiddleware, TodoAuthRoute);
+
+  app.listen(PORT, () => {
+    console.log("Server has started!");
+  });
+}
+
+main();
