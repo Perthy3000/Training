@@ -1,11 +1,8 @@
 const bcrypt = require("bcrypt");
-const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
 const User = require("../db/schema/user");
-
-dotenv.config();
 
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 const SECRET_KEY = process.env.SECRET_KEY;

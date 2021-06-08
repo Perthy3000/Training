@@ -4,6 +4,9 @@ const path = require("path");
 const fs = require("fs");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+dotenv.config({ path: path.join(__dirname, ".env") });
+dotenv.config({ path: path.join(__dirname, ".env.default") });
+
 const connect_db = require("./db/connect");
 const EchoRoute = require("./controller/echo");
 const TodoRoute = require("./controller/todo");
@@ -12,13 +15,9 @@ const TodoAuthRoute = require("./controller/todo_auth");
 const authMiddleware = require("./controller/auth_middleware");
 
 async function main() {
-  // dotenv.config({ path: path.join(__dirname, ".env") });
-  dotenv.config();
-
   const PORT = process.env.PORT || 3000;
-  const MONGO_URL = process.env.MONGO_URL;
 
-  await connect_db(MONGO_URL);
+  await connect_db();
   const app = express();
 
   // create a write stream (in append mode)
