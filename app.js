@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("fs");
+const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const connect_db = require("./db/connect");
 const EchoRoute = require("./controller/echo");
@@ -18,6 +20,15 @@ async function main() {
 
   await connect_db(MONGO_URL);
   const app = express();
+
+  // create a write stream (in append mode)
+  var accessLogStream = fs.createWriteStream(
+    path.join(__dirname, "log", "access.log"),
+    { flags: "a" }
+  );
+
+  // setup the logger
+  app.use(morgan("combined", { stream: accessLogStream }));
 
   app.use(cookieParser());
   app.use(express.json());
